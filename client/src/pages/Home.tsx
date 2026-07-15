@@ -912,15 +912,33 @@ function FreeBookSection() {
 ───────────────────────────────────────────────────────────── */
 function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       toast.error("Please fill in all fields.");
       return;
     }
-    toast.success("Thank you for reaching out! We'll be in touch soon.");
-    setForm({ name: "", email: "", message: "" });
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success("Thank you for reaching out! We'll be in touch soon.");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        toast.error(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      toast.error("Unable to send message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -1063,10 +1081,11 @@ function ContactSection() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 bg-gold text-charcoal font-semibold tracking-wider uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
+                  disabled={submitting}
+                  className="w-full px-6 py-4 bg-gold text-charcoal font-semibold tracking-wider uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
-                  Send Message
+                  {submitting ? "Sending..." : "Send Message"}
                 </button>
               </div>
             </form>
