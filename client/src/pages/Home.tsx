@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/hero-kintsugi-afpDGwH2Pa9oaqV3TWVV7C.webp";
+const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/butterfly-steering-notext-7kpPnVPtPdfMycYgcvK7Mq.webp";
 const BOOK_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/claimstocourage_76d1fc40.png";
 const AUTHOR_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/edsmith_0f944fcf.png";
 const JOURNEY_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/growth-journey-KU75RxZ5k7PYyrMEy5XAoA.webp";
@@ -26,86 +26,35 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════
           HERO SECTION
       ═══════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0a1628]">
-        {/* Subtle background texture */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.4\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }} />
+      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Butterfly background */}
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url("${HERO_IMG}")` }} />
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
 
         {/* Content */}
-        <div className="relative z-10 container px-4 pt-24 pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left side — Text */}
-            <div className="order-2 lg:order-1 text-center lg:text-left">
-              <AnimatedSection>
-                <p
-                  className="text-gold tracking-[0.3em] uppercase text-xs md:text-sm mb-6"
-                  style={{ fontFamily: "var(--font-body)" }}
-                >
-                  A Book by a Sacramento Personal Injury Attorney
-                </p>
-              </AnimatedSection>
+        <div className="relative z-10 container flex flex-col items-center justify-center min-h-screen py-20 text-center">
+          <AnimatedSection>
+            <h1 className="flex flex-col items-center" style={{ fontFamily: "var(--font-display)" }}>
+              <span className="block uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-[0.15em] leading-[1.1]" style={{ color: "rgb(232, 224, 212)", textShadow: "0px 2px 4px rgba(0,0,0,0.5), 0px 0px 40px rgba(0,0,0,0.3)" }}>Claims To</span>
+              <span className="block uppercase text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[11rem] tracking-[0.05em] leading-[0.9] font-normal" style={{ color: "rgb(232, 224, 212)", textShadow: "0px 3px 6px rgba(0,0,0,0.6), 0px 0px 60px rgba(0,0,0,0.3)" }}>Courage</span>
+            </h1>
+          </AnimatedSection>
 
-              <AnimatedSection delay={200}>
-                <h1
-                  className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.1] mb-6"
-                  style={{ fontFamily: "var(--font-display)" }}
-                >
-                  Claims to
-                  <br />
-                  <span className="text-gold italic">Courage</span>
-                </h1>
-              </AnimatedSection>
+          <AnimatedSection delay={200}>
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide mt-4 mb-auto italic font-medium" style={{ fontFamily: "var(--font-display)", color: "rgb(232, 224, 212)", textShadow: "0px 3px 8px rgba(0,0,0,0.7), 0px 0px 30px rgba(0,0,0,0.5)" }}>Reclaiming life after the crash</p>
+          </AnimatedSection>
 
-              <AnimatedSection delay={400}>
-                <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent lg:from-gold lg:via-gold lg:to-transparent mb-8 mx-auto lg:mx-0" />
-              </AnimatedSection>
+          <div className="flex-1" />
 
-              <AnimatedSection delay={500}>
-                <p
-                  className="text-white/85 text-lg md:text-xl max-w-xl leading-relaxed mb-10 mx-auto lg:mx-0"
-                  style={{ fontFamily: "var(--font-body)" }}
-                >
-                  How the grueling journey of personal injury litigation can become
-                  a catalyst for profound post-traumatic growth.
-                </p>
-              </AnimatedSection>
+          <AnimatedSection delay={400}>
+            <a href="#free-book" className="inline-block px-10 py-4 bg-gold text-charcoal font-semibold tracking-wider uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20 mb-6" style={{ fontFamily: "var(--font-body)" }}>Get Your Free Copy</a>
+          </AnimatedSection>
 
-              <AnimatedSection delay={700}>
-                <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
-                  <a
-                    href="#free-book"
-                    className="px-8 py-4 bg-gold text-charcoal font-semibold tracking-wider uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    Get Your Free Copy
-                  </a>
-                  <a
-                    href="#book"
-                    className="px-8 py-4 border border-white/30 text-white tracking-wider uppercase text-sm rounded-sm hover:border-gold hover:text-gold transition-all duration-300"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    Learn More
-                  </a>
-                </div>
-              </AnimatedSection>
-            </div>
-
-            {/* Right side — Book cover */}
-            <AnimatedSection delay={300} className="order-1 lg:order-2 flex justify-center">
-              <div className="relative">
-                <div className="absolute -inset-6 bg-gold/10 rounded-lg blur-2xl" />
-                <img
-                  src={BOOK_IMG}
-                  alt="Claims to Courage — Reclaiming life after the crash"
-                  className="relative w-64 md:w-80 lg:w-96 rounded-sm shadow-2xl shadow-black/50 hover:scale-[1.02] transition-transform duration-500"
-                />
-              </div>
-            </AnimatedSection>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <ArrowDown className="text-gold/60" size={24} />
-          </div>
+          <AnimatedSection delay={600}>
+            <p className="uppercase text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.12em] font-normal" style={{ fontFamily: "var(--font-display)", color: "rgb(232, 224, 212)", textShadow: "0px 2px 6px rgba(0,0,0,0.6)" }}>Edward A. Smith</p>
+            <p className="text-base sm:text-lg md:text-xl tracking-wide mt-1 italic" style={{ fontFamily: "var(--font-display)", color: "rgb(232, 224, 212)", opacity: 0.85, textShadow: "0px 1px 4px rgba(0,0,0,0.5)" }}>Founder of AutoAccident.com</p>
+          </AnimatedSection>
         </div>
       </section>
 
