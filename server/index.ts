@@ -7,11 +7,11 @@ import nodemailer from "nodemailer";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Hover SMTP transporter
+// SMTP transporter using Railway environment variables
 const transporter = nodemailer.createTransport({
-  host: "mail.hover.com",
-  port: 465,
-  secure: true, // SSL/TLS
+  host: process.env.SMTP_HOST || "mail.hover.com",
+  port: parseInt(process.env.SMTP_PORT || "465"),
+  secure: process.env.SMTP_SECURE !== "false", // defaults to true
   auth: {
     user: process.env.SMTP_USER || "info@claimstocourage.com",
     pass: process.env.SMTP_PASS || "",
