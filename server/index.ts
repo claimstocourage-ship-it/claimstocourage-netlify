@@ -36,6 +36,7 @@ async function startServer() {
       await transporter.sendMail({
         from: `"Claims to Courage Website" <info@claimstocourage.com>`,
         to: "info@claimstocourage.com",
+        cc: "karly@autoaccident.com, ed@autoaccident.com, cerelia@autoaccident.com",
         replyTo: email,
         subject: `New Contact Form Message from ${name}`,
         text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
