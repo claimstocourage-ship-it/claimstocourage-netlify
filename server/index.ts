@@ -8,13 +8,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // SMTP transporter using Railway environment variables
+// Using port 587 with STARTTLS (more firewall-friendly than 465)
+const smtpPort = parseInt(process.env.SMTP_PORT || "587");
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "mail.hover.com",
-  port: parseInt(process.env.SMTP_PORT || "465"),
-  secure: process.env.SMTP_SECURE !== "false", // defaults to true
+  port: smtpPort,
+  secure: smtpPort === 465, // true for 465, false for 587 (uses STARTTLS)
   auth: {
     user: process.env.SMTP_USER || "info@claimstocourage.com",
     pass: process.env.SMTP_PASS || "",
+  },
+  tls: {
+    rejectUnauthorized: false, // allow self-signed certs
   },
 });
 
