@@ -913,6 +913,7 @@ function FreeBookSection() {
 function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -922,17 +923,24 @@ function ContactSection() {
     }
     setSubmitting(true);
     try {
-      const res = await fetch("/api/contact", {
+      const formData = new URLSearchParams();
+      formData.append("form-name", "contact");
+      formData.append("name", form.name);
+      formData.append("email", form.email);
+      formData.append("message", form.message);
+
+      const res = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString(),
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
+
+      if (res.ok) {
+        setSubmitted(true);
         toast.success("Thank you for reaching out! We'll be in touch soon.");
         setForm({ name: "", email: "", message: "" });
       } else {
-        toast.error(data.error || "Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } catch {
       toast.error("Unable to send message. Please try again.");
@@ -1028,8 +1036,13 @@ function ContactSection() {
           <AnimatedSection delay={200}>
             <form
               onSubmit={handleSubmit}
+              name="contact"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
               className="bg-cream p-8 md:p-10 rounded-sm border border-stone/10"
             >
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="bot-field" />
               <div className="flex flex-col gap-5">
                 <div>
                   <label
