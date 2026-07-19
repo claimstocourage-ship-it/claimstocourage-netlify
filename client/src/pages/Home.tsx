@@ -12,6 +12,9 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
+const PDF_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_9977a535.pdf";
+const AUDIO_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_f621565c.mp3";
+
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/butterfly-steering-notext-7kpPnVPtPdfMycYgcvK7Mq.webp";
 const BOOK_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/claimstocourage_76d1fc40.png";
 const AUTHOR_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/edsmith_0f944fcf.png";
@@ -662,17 +665,27 @@ function FreeBookSection() {
       toast.error("Please select how you'd like to receive your copy.");
       return;
     }
-    if (!form.street.trim() || !form.city.trim() || !form.state.trim() || !form.zip.trim()) {
+    if (delivery === "physical" && (!form.street.trim() || !form.city.trim() || !form.state.trim() || !form.zip.trim())) {
       toast.error("Please fill in your complete mailing address.");
       return;
     }
     setSubmitted(true);
     if (delivery === "pdf") {
-      toast.success("Thank you! Check your inbox for a link to download your free PDF copy.");
+      // Trigger immediate PDF download
+      const link = document.createElement("a");
+      link.href = PDF_URL;
+      link.download = "ClaimsToCourage.pdf";
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("Your PDF is downloading now!");
     } else if (delivery === "physical") {
       toast.success("Thank you! Your physical copy will be mailed to the address provided.");
-    } else {
-      toast.success("Thank you! Check your inbox for a link to the audio version.");
+    } else if (delivery === "audio") {
+      // Open audio in new tab for streaming
+      window.open(AUDIO_URL, "_blank");
+      toast.success("Opening your audiobook now!");
     }
   };
 
@@ -718,9 +731,9 @@ function FreeBookSection() {
               className="text-charcoal-light text-lg leading-relaxed max-w-lg mx-auto"
               style={{ fontFamily: "var(--font-body)" }}
             >
-              {delivery === "pdf" && "A download link has been sent to your email. Your journey from setback to strength starts now."}
+              {delivery === "pdf" && "Your PDF should be downloading now. If it didn't start, check your downloads folder. Your journey from setback to strength starts now."}
               {delivery === "physical" && "Your copy of Claims to Courage is on its way. Allow 5\u201310 business days for delivery."}
-              {delivery === "audio" && "A link to the audio version has been sent to your email. Listen at your own pace."}
+              {delivery === "audio" && "Your audiobook is opening in a new tab. Listen at your own pace."}
             </p>
           </AnimatedSection>
         </div>
