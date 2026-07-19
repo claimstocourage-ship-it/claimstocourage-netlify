@@ -2,26 +2,12 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// SMTP transporter using Railway environment variables
-// Using port 587 with STARTTLS (more firewall-friendly than 465)
-const smtpPort = parseInt(process.env.SMTP_PORT || "587");
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "mail.hover.com",
-  port: smtpPort,
-  secure: smtpPort === 465, // true for 465, false for 587 (uses STARTTLS)
-  auth: {
-    user: process.env.SMTP_USER || "info@claimstocourage.com",
-    pass: process.env.SMTP_PASS || "",
-  },
-  tls: {
-    rejectUnauthorized: false, // allow self-signed certs
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function startServer() {
   const app = express();
@@ -29,13 +15,18 @@ async function startServer() {
 
   app.use(express.json());
 
-  // SMTP diagnostic endpoint (temporary)
-  app.get("/api/test-smtp", async (_req, res) => {
+  // Resend diagnostic endpoint
+  app.get("/api/test-email", async (_req, res) => {
     try {
-      await transporter.verify();
-      return res.json({ success: true, message: "SMTP connection OK", host: process.env.SMTP_HOST, port: process.env.SMTP_PORT, user: process.env.SMTP_USER });
+      const result = await resend.emails.send({
+        from: "Claims to Courage <info@claimstocourage.com>",
+        to: ["info@claimstocourage.com"],
+        subject: "Test email from Railway",
+        text: "SMTP test via Resend — if you receive this, email delivery is working!",
+      });
+      return res.json({ success: true, result });
     } catch (err: any) {
-      return res.status(500).json({ success: false, error: err.message, host: process.env.SMTP_HOST, port: process.env.SMTP_PORT, user: process.env.SMTP_USER });
+      return res.status(500).json({ success: false, error: err.message });
     }
   });
 
@@ -48,10 +39,10 @@ async function startServer() {
     }
 
     try {
-      await transporter.sendMail({
-        from: `"Claims to Courage Website" <info@claimstocourage.com>`,
-        to: "info@claimstocourage.com",
-        cc: "karly@autoaccident.com, ed@autoaccident.com, cerelia@autoaccident.com",
+      await resend.emails.send({
+        from: "Claims to Courage <info@claimstocourage.com>",
+        to: ["info@claimstocourage.com"],
+        cc: ["karly@autoaccident.com", "ed@autoaccident.com", "cerelia@autoaccident.com"],
         replyTo: email,
         subject: `New Contact Form Message from ${name}`,
         text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
