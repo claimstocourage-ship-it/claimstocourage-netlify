@@ -29,6 +29,16 @@ async function startServer() {
 
   app.use(express.json());
 
+  // SMTP diagnostic endpoint (temporary)
+  app.get("/api/test-smtp", async (_req, res) => {
+    try {
+      await transporter.verify();
+      return res.json({ success: true, message: "SMTP connection OK", host: process.env.SMTP_HOST, port: process.env.SMTP_PORT, user: process.env.SMTP_USER });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message, host: process.env.SMTP_HOST, port: process.env.SMTP_PORT, user: process.env.SMTP_USER });
+    }
+  });
+
   // Contact form endpoint
   app.post("/api/contact", async (req, res) => {
     const { name, email, message } = req.body || {};
