@@ -674,6 +674,18 @@ function FreeBookSection() {
 
     setSubmitting(true);
 
+    // Send to server first (confirmation email to person + office notification)
+    try {
+      const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
+      await fetch(`${RAILWAY_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, delivery }),
+      });
+    } catch (err) {
+      console.error("Failed to send notification:", err);
+    }
+
     // Trigger immediate delivery in browser
     if (delivery === "pdf") {
       const link = document.createElement("a");
@@ -685,18 +697,6 @@ function FreeBookSection() {
       document.body.removeChild(link);
     } else if (delivery === "audio") {
       window.open(AUDIO_URL, "_blank");
-    }
-
-    // Send to server (confirmation email to person + office notification)
-    try {
-      const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
-      await fetch(`${RAILWAY_URL}/api/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, delivery }),
-      });
-    } catch (err) {
-      console.error("Failed to send notification:", err);
     }
 
     setSubmitting(false);
@@ -949,16 +949,11 @@ function ContactSection() {
     }
     setSubmitting(true);
     try {
-      const formData = new URLSearchParams();
-      formData.append("form-name", "contact");
-      formData.append("name", form.name);
-      formData.append("email", form.email);
-      formData.append("message", form.message);
-
-      const res = await fetch("/", {
+      const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
+      const res = await fetch(`${RAILWAY_URL}/api/contact`, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
       });
 
       if (res.ok) {
