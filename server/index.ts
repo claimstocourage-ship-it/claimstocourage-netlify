@@ -3,6 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Resend } from "resend";
+import mysql from "mysql2/promise";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,55 @@ const OFFICE_EMAILS = [
   "ed@autoaccident.com",
   "cerelia@autoaccident.com",
 ];
+
+// ─── MySQL-backed counters (permanent, survives redeploys) ───────────────────
+let db: mysql.Pool | null = null;
+
+async function getDb(): Promise<mysql.Pool> {
+  if (!db) {
+    const url = process.env.MYSQL_URL;
+    if (!url) throw new Error("MYSQL_URL not set");
+    db = mysql.createPool(url);
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS book_counters (
+        delivery_type VARCHAR(20) PRIMARY KEY,
+        count INT NOT NULL DEFAULT 0
+      )
+    `);
+    for (const type of ["pdf", "audio", "physical"]) {
+      await db.execute(
+        "INSERT IGNORE INTO book_counters (delivery_type, count) VALUES (?, 0)",
+        [type]
+      );
+    }
+  }
+  return db;
+}
+
+async function getCounters() {
+  try {
+    const pool = await getDb();
+    const [rows] = await pool.execute("SELECT delivery_type, count FROM book_counters") as [any[], any];
+    const counts: Record<string, number> = { pdf: 0, audio: 0, physical: 0 };
+    for (const row of rows) counts[row.delivery_type] = row.count;
+    counts.total = counts.pdf + counts.audio + counts.physical;
+    return counts;
+  } catch {
+    return { pdf: 0, audio: 0, physical: 0, total: 0 };
+  }
+}
+
+async function incrementCounter(deliveryType: string) {
+  try {
+    const pool = await getDb();
+    await pool.execute(
+      "UPDATE book_counters SET count = count + 1 WHERE delivery_type = ?",
+      [deliveryType]
+    );
+  } catch (err) {
+    console.error("Failed to increment counter:", err);
+  }
+}
 
 async function startServer() {
   const app = express();
@@ -58,6 +108,13 @@ async function startServer() {
     } catch (err: any) {
       return res.status(500).json({ success: false, error: err.message });
     }
+  });
+
+  // Live counters endpoint
+  app.get("/api/counters", async (_req, res) => {
+    const counts = await getCounters();
+    res.set("Cache-Control", "public, max-age=30");
+    res.json(counts);
   });
 
   // Book request form endpoint
@@ -153,6 +210,9 @@ async function startServer() {
           `,
           text: `New Book Request\n\nName: ${fullName}\nEmail: ${email}\nFormat: ${formatLabel}${addressInfo}\n\nSent from claimstocourage.com`,
         });
+
+        // Increment counter in MySQL
+        await incrementCounter(delivery);
 
         return res.json({ success: true });
       } catch (err) {
