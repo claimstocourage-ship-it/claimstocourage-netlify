@@ -23,6 +23,26 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
+  // CORS — allow requests from claimstocourage.com and Netlify preview URLs
+  app.use((req, res, next) => {
+    const origin = req.headers.origin || "";
+    const allowed = [
+      "https://claimstocourage.com",
+      "https://www.claimstocourage.com",
+    ];
+    if (allowed.includes(origin) || origin.endsWith(".netlify.app")) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    } else {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+    }
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   app.use(express.json());
 
   // Resend diagnostic endpoint
