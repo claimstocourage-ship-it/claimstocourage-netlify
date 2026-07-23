@@ -653,6 +653,7 @@ export default function Home() {
    FREE BOOK SECTION
 ───────────────────────────────────────────────────────────── */
 function FreeBookSection() {
+  const counts = useCounters();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
