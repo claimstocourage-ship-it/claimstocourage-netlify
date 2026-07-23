@@ -318,7 +318,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                quote: “This is not a book about lawsuits; it is a book about what it means to reconstruct a life after it has been disrupted. It offers a powerful framework for understanding how individuals can move forward—finding meaning, light, and value in everyday life.”,
+                quote: "This is not a book about lawsuits; it is a book about what it means to reconstruct a life after it has been disrupted. It offers a powerful framework for understanding how individuals can move forward—finding meaning, light, and value in everyday life.",
                 author: "Dr. Topher Stephenson, MD",
                 role: "",
               },
