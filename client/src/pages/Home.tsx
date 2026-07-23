@@ -4,7 +4,7 @@
  * Warm charcoal + stone + burnished gold. Playfair Display + Source Sans 3.
  * Vertical storytelling that mirrors the journey from trauma to growth.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowDown, BookOpen, Mail, Phone, MapPin, Quote, ChevronRight, Heart, Shield, Lightbulb, Users, Download, Truck, Headphones, Check } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -21,7 +21,21 @@ const AUTHOR_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrE
 const JOURNEY_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/growth-journey-KU75RxZ5k7PYyrMEy5XAoA.webp";
 const TESTIMONIAL_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/testimonial-bg-m6A64cEcAr9WCdvrT9McKq.webp";
 
+const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
+
+function useCounters() {
+  const [counts, setCounts] = useState({ pdf: 0, audio: 0, physical: 0, total: 0 });
+  useEffect(() => {
+    fetch(`${RAILWAY_URL}/api/counters`)
+      .then((r) => r.json())
+      .then((data) => setCounts(data))
+      .catch(() => {}); // silently fail — counters just stay at 0
+  }, []);
+  return counts;
+}
+
 export default function Home() {
+  const counts = useCounters();
   return (
     <div className="min-h-screen bg-cream">
       <Navigation />
@@ -758,6 +772,35 @@ function FreeBookSection() {
   return (
     <section id="free-book" className="py-24 md:py-32 bg-cream">
       <div className="container max-w-3xl">
+        {/* ─── Live Counters ─── */}
+        <AnimatedSection className="mb-12">
+          <div className="flex items-center justify-center gap-0">
+            {[
+              { label: "PDFS DOWNLOADED", value: counts.pdf },
+              { label: "BOOKS MAILED", value: counts.physical },
+              { label: "AUDIO LISTENS", value: counts.audio },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center">
+                <div className="text-center px-10 py-4">
+                  <div
+                    className="text-5xl md:text-6xl text-charcoal leading-none mb-2"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {item.value.toLocaleString()}
+                  </div>
+                  <div
+                    className="text-charcoal/50 text-[10px] tracking-[0.2em] uppercase"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    {item.label}
+                  </div>
+                </div>
+                {i < 2 && <div className="w-px h-12 bg-charcoal/20 flex-shrink-0" />}
+              </div>
+            ))}
+          </div>
+        </AnimatedSection>
+
         <div className="text-center mb-12">
           <AnimatedSection>
             <p
