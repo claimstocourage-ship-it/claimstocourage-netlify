@@ -320,12 +320,12 @@ export default function Home() {
               {
                 quote: “This is not a book about lawsuits; it is a book about what it means to reconstruct a life after it has been disrupted. It offers a powerful framework for understanding how individuals can move forward—finding meaning, light, and value in everyday life.”,
                 author: "Dr. Topher Stephenson, MD",
-            
+                role: "",
               },
               {
                 quote: "There’s a wealth of experience behind the Claims to Courage: Reclaiming Life After the Crash, a wealth, one could only hope to have in the most successful of careers. This book encourages understanding and empathy for difficult situations with the ultimate conclusion: you can’t change what happens to you only how you respond.",
                 author: "Dr. John Kelada, MD",
-                
+                role: "",
               },
               {
                 quote: "Ed Smith’s ‘Claims to Courage’ is more than a book about injury or legal recovery. It’s about resilience, perspective, and the possibility that life’s worst moments can become the beginning of growth, healing, and a completely new chapter.",
