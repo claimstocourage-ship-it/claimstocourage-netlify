@@ -318,24 +318,24 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                quote: "This book changed how I see my accident. I went from feeling like a victim to understanding that my struggle was building something stronger inside me.",
-                author: "Former Client",
-                role: "Auto Accident Survivor",
+                quote: “This is not a book about lawsuits; it is a book about what it means to reconstruct a life after it has been disrupted. It offers a powerful framework for understanding how individuals can move forward—finding meaning, light, and value in everyday life.”,
+                author: "Dr. Topher Stephenson, MD",
+            
               },
               {
-                quote: "As a therapist, I recommend this book to every client navigating a legal case. It bridges the gap between the courtroom and the counseling room beautifully.",
-                author: "Licensed Therapist",
-                role: "Trauma Specialist, Sacramento",
+                quote: "There’s a wealth of experience behind the Claims to Courage: Reclaiming Life After the Crash, a wealth, one could only hope to have in the most successful of careers. This book encourages understanding and empathy for difficult situations with the ultimate conclusion: you can’t change what happens to you only how you respond.",
+                author: "Dr. John Kelada, MD",
+                
               },
               {
-                quote: "I wish I had this book when my case started. It would have saved me months of confusion and self-doubt. The stories made me feel less alone.",
-                author: "Former Client",
-                role: "Workplace Injury Survivor",
+                quote: "Ed Smith’s ‘Claims to Courage’ is more than a book about injury or legal recovery. It’s about resilience, perspective, and the possibility that life’s worst moments can become the beginning of growth, healing, and a completely new chapter.",
+                author: "Dr. Darrick Lawson",
+                role: "Owner, The Healing Touch Chiropractic",
               },
               {
-                quote: "A groundbreaking approach to personal injury law. This isn't just a legal book — it's a human book. Every attorney should read it.",
-                author: "Fellow Attorney",
-                role: "California Trial Lawyers Association",
+                quote: "I have treated personal injury patients for 35 years….I’ve known Mr. Smith for 20 years. Ed’s integrity and ethics are demonstrated his entire career. My patients who he has represented would whole heartedly agree. This book should be given to anyone who is involved in any type of personal injury trauma…. The book is spot on in both medical and legal manifestations…",
+                author: "Ron Rudometkin",
+                role: "Chiropractor",
               },
             ].map((item, i) => (
               <AnimatedSection key={i} delay={i * 100}>
