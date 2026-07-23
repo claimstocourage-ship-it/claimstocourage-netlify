@@ -655,7 +655,9 @@ function FreeBookSection() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
       toast.error("Please fill in your name and email address.");
@@ -669,9 +671,11 @@ function FreeBookSection() {
       toast.error("Please fill in your complete mailing address.");
       return;
     }
-    setSubmitted(true);
+
+    setSubmitting(true);
+
+    // Trigger immediate delivery in browser
     if (delivery === "pdf") {
-      // Trigger immediate PDF download
       const link = document.createElement("a");
       link.href = PDF_URL;
       link.download = "ClaimsToCourage.pdf";
@@ -679,14 +683,24 @@ function FreeBookSection() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      toast.success("Your PDF is downloading now!");
-    } else if (delivery === "physical") {
-      toast.success("Thank you! Your physical copy will be mailed to the address provided.");
     } else if (delivery === "audio") {
-      // Open audio in new tab for streaming
       window.open(AUDIO_URL, "_blank");
-      toast.success("Opening your audiobook now!");
     }
+
+    // Send to server (confirmation email to person + office notification)
+    try {
+      const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
+      await fetch(`${RAILWAY_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, delivery }),
+      });
+    } catch (err) {
+      console.error("Failed to send notification:", err);
+    }
+
+    setSubmitting(false);
+    setSubmitted(true);
   };
 
   const inputClasses =
@@ -860,7 +874,8 @@ function FreeBookSection() {
               </div>
             </div>
 
-            {/* Mailing Address — always collected */}
+            {/* Mailing Address — only for physical copy */}
+            {delivery === "physical" && (
             <div className="mb-6">
               <label className="block text-xs text-charcoal-light uppercase tracking-wider mb-2">Mailing Address *</label>
               <div className="space-y-3">
@@ -898,16 +913,14 @@ function FreeBookSection() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* Submit */}
             <button
               type="submit"
               className="w-full px-8 py-4 bg-gold text-charcoal font-semibold tracking-wider uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
             >
-              {delivery === "pdf" && "Send Me the PDF"}
-              {delivery === "physical" && "Mail My Free Copy"}
-              {delivery === "audio" && "Send Me the Audio Link"}
-              {!delivery && "Choose a Format Above"}
+              {submitting ? "Sending..." : delivery === "pdf" ? "Get My PDF" : delivery === "physical" ? "Mail My Free Copy" : delivery === "audio" ? "Listen Now" : "Choose a Format Above"}
             </button>
 
             <p className="text-charcoal-light/50 text-xs mt-4 text-center">
