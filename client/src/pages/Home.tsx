@@ -15,11 +15,13 @@ import { Link } from "wouter";
 const PDF_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_9977a535.pdf";
 const AUDIO_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_f621565c.mp3";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/butterfly-steering-notext-7kpPnVPtPdfMycYgcvK7Mq.webp";
-const BOOK_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/claimstocourage_76d1fc40.png";
-const AUTHOR_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/edsmith_0f944fcf.png";
-const JOURNEY_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/growth-journey-KU75RxZ5k7PYyrMEy5XAoA.webp";
-const TESTIMONIAL_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663414877813/QrEtQVCJ2AY7uh46dV7DSH/testimonial-bg-m6A64cEcAr9WCdvrT9McKq.webp";
+// Static image assets are deployed with Netlify from client/public/images.
+// This avoids the retired legacy image host and preserves image availability across future deployments.
+const HERO_IMG = "/images/claims-to-courage-butterfly-hero.png";
+const BOOK_IMG = "/images/claims-to-courage-book-cover.png";
+const AUTHOR_IMG = "/images/edward-a-smith-author-portrait.webp";
+const JOURNEY_IMG = "/images/claims-to-courage-growth-journey.png";
+const TESTIMONIAL_BG = "/images/claims-to-courage-kintsugi-testimonial.png";
 
 const RAILWAY_URL = "https://claimstocourage-netlify-production.up.railway.app";
 
