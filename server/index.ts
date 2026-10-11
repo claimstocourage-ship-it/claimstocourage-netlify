@@ -12,6 +12,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const PDF_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_9977a535.pdf";
 const AUDIO_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_f621565c.mp3";
+const AUDIO_DOWNLOAD_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_Download.mp3";
 
 const OFFICE_EMAILS = [
   "info@claimstocourage.com",
@@ -165,9 +166,10 @@ async function startServer() {
             html: `
               <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #f9f6f0; border-radius: 4px;">
                 <h2 style="color: #1a1a1a; border-bottom: 2px solid #c9a84c; padding-bottom: 12px;">Thank You, ${firstName}!</h2>
-                <p style="color: #555; font-size: 16px; line-height: 1.6;">Your free audiobook of <em>Claims to Courage</em> is ready to listen. Click the button below to start streaming:</p>
+                <p style="color: #555; font-size: 16px; line-height: 1.6;">Your free audiobook of <em>Claims to Courage</em> is ready. You can listen online or download an MP3 copy to your device:</p>
                 <div style="text-align: center; margin: 32px 0;">
-                  <a href="${AUDIO_URL}" style="display: inline-block; padding: 14px 32px; background: #c9a84c; color: #1a1a1a; font-weight: bold; text-decoration: none; border-radius: 2px; letter-spacing: 0.05em; font-family: sans-serif; font-size: 14px; text-transform: uppercase;">Listen to Audiobook</a>
+                  <a href="${AUDIO_URL}" style="display: inline-block; padding: 14px 32px; margin: 0 6px 12px; background: #c9a84c; color: #1a1a1a; font-weight: bold; text-decoration: none; border-radius: 2px; letter-spacing: 0.05em; font-family: sans-serif; font-size: 14px; text-transform: uppercase;">Listen in Browser</a>
+                  <a href="${AUDIO_DOWNLOAD_URL}" style="display: inline-block; padding: 14px 32px; margin: 0 6px 12px; background: #1a1a1a; color: #ffffff; font-weight: bold; text-decoration: none; border-radius: 2px; letter-spacing: 0.05em; font-family: sans-serif; font-size: 14px; text-transform: uppercase;">Download MP3</a>
                 </div>
                 <p style="color: #555; font-size: 15px; line-height: 1.6;">We hope this book helps guide you through your journey from setback to strength. If you have any questions, feel free to reach out to us at <a href="mailto:info@claimstocourage.com" style="color: #c9a84c;">info@claimstocourage.com</a>.</p>
                 <p style="color: #555; font-size: 15px; line-height: 1.6; margin-top: 24px;">Warm regards,<br><strong>Edward A. Smith</strong><br><em>Founder, AutoAccident.com</em></p>

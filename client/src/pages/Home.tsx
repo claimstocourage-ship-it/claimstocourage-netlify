@@ -14,6 +14,7 @@ import { Link } from "wouter";
 
 const PDF_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_9977a535.pdf";
 const AUDIO_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_f621565c.mp3";
+const AUDIO_DOWNLOAD_URL = "https://pub-650ec695e808480cb5eb866dc2b5f537.r2.dev/ClaimsToCourage_Audiobook_Download.mp3";
 
 // Static image assets are deployed with Netlify from client/public/images.
 // This avoids the retired legacy image host and preserves image availability across future deployments.
@@ -712,8 +713,6 @@ function FreeBookSection() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } else if (delivery === "audio") {
-      window.open(AUDIO_URL, "_blank");
     }
 
     setSubmitting(false);
@@ -739,8 +738,8 @@ function FreeBookSection() {
     {
       id: "audio" as const,
       icon: Headphones,
-      title: "Listen to Audio",
-      description: "Narrated audio version",
+      title: "Listen or Download Audio",
+      description: "Stream online or download the MP3",
     },
   ];
 
@@ -758,14 +757,44 @@ function FreeBookSection() {
             >
               Thank You, {form.firstName}!
             </h2>
-            <p
-              className="text-charcoal-light text-lg leading-relaxed max-w-lg mx-auto"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {delivery === "pdf" && "Your PDF should be downloading now. If it didn't start, check your downloads folder. Your journey from setback to strength starts now."}
-              {delivery === "physical" && "Your copy of Claims to Courage is on its way. Allow 5\u201310 business days for delivery."}
-              {delivery === "audio" && "Your audiobook is opening in a new tab. Listen at your own pace."}
-            </p>
+            {delivery !== "audio" && (
+              <p
+                className="text-charcoal-light text-lg leading-relaxed max-w-lg mx-auto"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {delivery === "pdf" && "Your PDF should be downloading now. If it didn't start, check your downloads folder. Your journey from setback to strength starts now."}
+                {delivery === "physical" && "Your copy of Claims to Courage is on its way. Allow 5\u201310 business days for delivery."}
+              </p>
+            )}
+            {delivery === "audio" && (
+              <>
+                <p
+                  className="text-charcoal-light text-lg leading-relaxed max-w-lg mx-auto"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  Your audiobook is ready. Listen in your browser or download an MP3 copy to your device.
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a
+                    href={AUDIO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold text-charcoal font-semibold tracking-wide uppercase text-sm rounded-sm hover:bg-gold-light transition-all duration-300"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    <Headphones size={18} /> Listen in Browser
+                  </a>
+                  <a
+                    href={AUDIO_DOWNLOAD_URL}
+                    download="Claims-to-Courage-Audiobook.mp3"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-charcoal text-white font-semibold tracking-wide uppercase text-sm rounded-sm hover:bg-charcoal-light transition-all duration-300"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    <Download size={18} /> Download MP3
+                  </a>
+                </div>
+              </>
+            )}
           </AnimatedSection>
         </div>
       </section>
@@ -781,7 +810,7 @@ function FreeBookSection() {
             {[
               { label: "PDFS DOWNLOADED", value: counts.pdf },
               { label: "BOOKS MAILED", value: counts.physical },
-              { label: "AUDIO LISTENS", value: counts.audio },
+              { label: "AUDIO REQUESTS", value: counts.audio },
             ].map((item, i) => (
               <div key={i} className="flex items-center">
                 <div className="text-center px-10 py-4">
