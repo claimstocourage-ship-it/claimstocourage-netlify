@@ -18,6 +18,7 @@ const OFFICE_EMAILS = [
   "karly@autoaccident.com",
   "ed@autoaccident.com",
   "cerelia@autoaccident.com",
+  "barb@autoaccident.com",
 ];
 
 // ─── MySQL-backed counters (permanent, survives redeploys) ───────────────────
